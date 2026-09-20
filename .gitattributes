@@ -1,0 +1,19 @@
+* text=auto eol=lf
+
+# shell and python run on the Linux server: CRLF would break the shebang
+*.sh text eol=lf
+*.py text eol=lf
+
+# Windows-only helpers
+*.ps1 text eol=crlf
+
+# binaries
+*.png binary
+*.jpg binary
+*.glb binary
+*.gltf binary
+*.bin binary
+*.ogg binary
+*.wav binary
+*.dll binary
+*.so binary
