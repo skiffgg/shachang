@@ -29,10 +29,10 @@ seats, never the world itself.
 
 | Mode | Description |
 |---|---|
-| **Endless** (无尽) | Waves of AI squads with a between-wave shop. Enemy tanks arrive from wave 4. |
-| **Extraction** (撤离) | Loot the map for valuables and reach the extraction point alive. |
-| **Conquest** (据点占领) | Capture and hold control points against AI squads. |
-| **Online** (联机) | 6v6 team deathmatch on a dedicated server, joined from an in-game room list. |
+| **Endless**  | Waves of AI squads with a between-wave shop. Enemy tanks arrive from wave 4. |
+| **Extraction**  | Loot the map for valuables and reach the extraction point alive. |
+| **Conquest**  | Capture and hold control points against AI squads. |
+| **Online**  | 6v6 team deathmatch on a dedicated server, joined from an in-game room list. |
 
 ## Controls
 
