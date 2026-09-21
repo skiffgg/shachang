@@ -44,7 +44,11 @@ public class LobbyClient : MonoBehaviour
         {
             req.timeout = 6;
             yield return req.SendWebRequest();
-            if (req.result != UnityWebRequest.Result.Success) status = "大厅连接失败：" + req.error;
+            if (req.result != UnityWebRequest.Result.Success)
+            {
+                status = "大厅连接失败：" + req.error + "（" + req.responseCode + "）";
+                Debug.LogWarning("[Lobby] " + LobbyUrl + " -> " + req.result + " " + req.error);
+            }
             else
             {
                 rooms.Clear();

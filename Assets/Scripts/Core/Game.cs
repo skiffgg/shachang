@@ -8,7 +8,7 @@ using UnityEngine.Rendering.PostProcessing;
 public enum Mode { Menu, Endless, Extraction, Conquest, Online }
 
 // Boots everything, runs the two modes, day/night + weather, post-processing quality, HUD and menus.
-public class Game : MonoBehaviour
+public partial class Game : MonoBehaviour
 {
     public static Game I;
     public static bool Headless;                 // dedicated server: no shaders, no camera, no audio
@@ -18,7 +18,8 @@ public class Game : MonoBehaviour
     float fps, fpsAcc; int fpsN; string shotPath; float shotAt = -1;
     float dayT = 0.3f, timeLeft, extractHold, weatherTimer = 120, reinforceT;
     bool showHelp, showShop, gameOver, won, showJoin; public bool showMap;
-    string joinIp = "127.0.0.1", joinPort = "7777", lobbyUrl = "http://66.135.26.234:8080"; string endText = "";
+    string joinIp = "66.135.26.234", joinPort = "8443", lobbyUrl = "http://66.135.26.234:8080"; string endText = "";
+    float lobbyPollT;                                   // the room list refreshes itself while the panel is open
     Texture2D mapTex, ringTex, vigTex;
     public Vector3 wp; public string wpName = ""; int wpIndex = -1;
     public float scoreP, scoreE, respawnT; bool showBag;      // G: conquest state
@@ -722,7 +723,7 @@ public class Game : MonoBehaviour
         return GUI.Button(r, GUIContent.none, GUIStyle.none);
     }
 
-    void Menu(float W, float H)
+    void LegacyMenu(float W, float H)
     {
         var bg = UiTex(ref uiBg, "menu_bg");
         if (bg) { GUI.color = new Color(1, 1, 1, 0.92f); GUI.DrawTexture(new Rect(0, 0, W, H), bg, ScaleMode.ScaleAndCrop); GUI.color = Color.white; }
@@ -748,11 +749,18 @@ public class Game : MonoBehaviour
         {
             var jr = new Rect(W / 2 - 230, H * 0.28f, 460, 340); Fill(jr, new Color(0.05f, 0.05f, 0.07f, 0.95f));
             var lob = LobbyClient.Create();
+            // keep the list fresh on its own; a player should never have to hunt for the refresh button
+            if (!lob.busy && Time.unscaledTime > lobbyPollT)
+            {
+                lobbyPollT = Time.unscaledTime + 5f;
+                LobbyClient.LobbyUrl = lobbyUrl.Trim();
+                lob.Refresh();
+            }
             Label(new Rect(jr.x, jr.y + 6, jr.width, 22), "房间列表", new GUIStyle(small) { alignment = TextAnchor.MiddleCenter, fontSize = 16 });
             lobbyUrl = GUI.TextField(new Rect(jr.x + 16, jr.y + 32, 300, 28), lobbyUrl, 60);
             if (GUI.Button(new Rect(jr.x + 324, jr.y + 32, 100, 28), "刷新"))
             {
-                LobbyClient.LobbyUrl = lobbyUrl.Trim(); lob.Refresh();
+                LobbyClient.LobbyUrl = lobbyUrl.Trim(); lobbyPollT = Time.unscaledTime + 5f; lob.Refresh();
             }
             float ry = jr.y + 68;
             foreach (var r in lob.rooms)
@@ -767,7 +775,7 @@ public class Game : MonoBehaviour
             joinPort = GUI.TextField(new Rect(jr.x + 262, jr.yMax - 48, 70, 28), joinPort, 6);
             if (GUI.Button(new Rect(jr.x + 340, jr.yMax - 48, 84, 28), "连接"))
             {
-                ushort.TryParse(joinPort, out ushort pt); if (pt == 0) pt = 7777;
+                ushort.TryParse(joinPort, out ushort pt); if (pt == 0) pt = 8443;
                 StartOnline(joinIp.Trim(), pt);
             }
             return;

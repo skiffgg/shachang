@@ -14,6 +14,9 @@ public static class Builder
 
     public static void Setup()
     {
+        // the room directory is plain HTTP; Unity blocks that in a player unless it is allowed here
+        PlayerSettings.insecureHttpOption = InsecureHttpOption.AlwaysAllowed;
+
         ImportSettings();
         Materials();
         Project();
