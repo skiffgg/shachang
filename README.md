@@ -1,4 +1,4 @@
-# ShaChang (沙场)
+# ShaChang 
 
 A first-person shooter built in Unity for Windows PC: a procedurally generated desert battlefield with
 six zones, drivable vehicles, a helicopter, destructible cover, weather and a day/night cycle, plus a
